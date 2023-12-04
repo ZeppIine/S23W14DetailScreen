@@ -5,6 +5,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,31 +27,32 @@ fun SongApp(){
         composable(SongScreen.List.name){
             SongList(navController)
         }
-        composable(SongScreen.Detail.name){
-            SongDetail(navController)
+        composable(
+            route = "${SongScreen.Detail.name}/{songId}",
+            arguments = listOf(
+                navArgument("songId"){ type = NavType.StringType }
+            )
+        ){
+            SongDetail(it.arguments?.getString("songId"))
         }
     }
 }
 
 @Composable
-fun SongDetail(navController: NavController) {
-    Button(onClick = {
-        navController.navigate(SongScreen.List.name)
-    }) {
-        Text("노래 내용")
-    }
+fun SongDetail(songId: String?) {
+    Text("$songId 내용")
 }
 
 @Composable
 fun SongList(navController: NavController) {
     Column {
         Button(onClick = {
-            navController.navigate(SongScreen.Detail.name)
+            navController.navigate("${SongScreen.Detail.name}/노래1")
         }) {
             Text("노래 1")
         }
         Button(onClick = {
-            navController.navigate(SongScreen.Detail.name)
+            navController.navigate("${SongScreen.Detail.name}/노래2")
         }) {
             Text("노래 2")
         }
